@@ -13,6 +13,7 @@ public:
 	MatrixTransform(std::string, Node*,Matrix4 );
 	virtual void draw(Matrix4 C);
 	void set(Matrix4);
+	Matrix4 get();
 };
 
 #endif

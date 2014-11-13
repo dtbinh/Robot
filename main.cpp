@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
   glutSpecialFunc(Window::funcKeyboardCallback);
     
   // Initialize cube matrix:
+  Window::load();
   Globals::object.getMatrix().identity();
   glutMainLoop();
   return 0;

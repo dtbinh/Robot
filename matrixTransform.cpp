@@ -4,7 +4,9 @@
 #include "matrixTransform.h"
 
 
-MatrixTransform::MatrixTransform() {}
+MatrixTransform::MatrixTransform() {
+	M.identity();
+}
 
 MatrixTransform::MatrixTransform(std::string n,Node* p, Matrix4 temp) {
 		M = temp;
@@ -17,6 +19,10 @@ MatrixTransform::MatrixTransform( Matrix4 temp) {
 
 void MatrixTransform::set(Matrix4 temp) {
 	M = temp;
+}
+
+Matrix4 MatrixTransform::get() {
+	return M;
 }
 void MatrixTransform::draw(Matrix4 temp) {
 	Matrix4 C = M * temp;

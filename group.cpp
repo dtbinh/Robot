@@ -27,3 +27,9 @@ void Group::draw(Matrix4 C) {
 		temp->draw(C);
 	}
 }
+
+Node* Group::getChild(int i) {
+	std::list<Node*>::iterator it = children.begin();
+	Node* temp = *it + i;
+	return temp;
+}

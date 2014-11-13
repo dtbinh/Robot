@@ -18,8 +18,33 @@ int Window::height = 512;   // set window height in pixels here
 static double degree = 1;
 static bool forw = true;
 bool create = true;
+
+//Main Group
 Group *world = new Group();
 
+//Rotation Matrix Transforms
+MatrixTransform *LArmRot = new MatrixTransform();
+MatrixTransform *RArmRot = new MatrixTransform();
+MatrixTransform *LLegRot = new MatrixTransform();
+MatrixTransform *RLegRot = new MatrixTransform();
+
+//Placement Matrix Transform
+MatrixTransform *mtHead = new MatrixTransform();
+MatrixTransform *mtLEye = new MatrixTransform();
+MatrixTransform *mtREye = new MatrixTransform();
+MatrixTransform *mtMouth = new MatrixTransform();
+MatrixTransform *mtLArm = new MatrixTransform();
+MatrixTransform *mtRArm = new MatrixTransform();
+MatrixTransform *mtLLeg = new MatrixTransform();
+MatrixTransform *mtRLeg = new MatrixTransform();
+
+//Body Parts
+Cube *Torso = new Cube(4);
+Cube *Head = new Cube(2);
+Cube *Eye = new Cube(0.5);
+Cube *Mouth = new Cube(0.5);
+Cube *Arm = new Cube(1);
+Cube *Leg = new Cube(1);
 
 
 //----------------------------------------------------------------------------
@@ -44,6 +69,90 @@ void Window::reshapeCallback(int w, int h)
   glMatrixMode(GL_MODELVIEW);
 }
 
+void Window::load() {
+	Matrix4 temp;
+	Matrix4 altTemp;
+
+	//Torso
+	Torso->setColor(1, 1, 1);
+	world->addChild(Torso);
+
+	//Head
+	altTemp.makeTranslate(0, 3, 0);
+	mtHead->set(altTemp);
+	Head->setColor(1, 0, 0);
+	mtHead->addChild(Head);
+	//Eyes
+	altTemp.makeTranslate(-0.6, 0.25, 2);
+	mtLEye->set(altTemp);
+	Eye->setColor(1, 1, 0);
+	mtLEye->addChild(Eye);
+	mtHead->addChild(mtLEye);
+	altTemp.makeTranslate(0.6, 0.25, 2);
+	mtREye->set(altTemp);
+	mtREye->addChild(Eye);
+	mtHead->addChild(mtREye);
+	//Mouth
+	altTemp.makeTranslate(0, -0.5, 2);
+	mtMouth->set(altTemp);
+	altTemp.makeScale(2, 1, 1);
+	Mouth->setMatrix(altTemp);
+	Mouth->setColor(1, 1, 0);
+	mtMouth->addChild(Mouth);
+	mtHead->addChild(mtMouth);
+	world->addChild(mtHead);
+
+	//Left Arm
+	altTemp.makeTranslate(-2.5, 0, 0);
+	/*
+	if (forw) {
+	altTemp.makeRotate(degree, Vector3(0,1,0));
+	temp = temp *altTemp;
+	degree = degree + 1;
+	if (degree == 40)
+	forw = !forw;
+	}
+	if (!forw && degree > -45) {
+	altTemp.makeRotateX(-degree);
+	temp = temp *altTemp;
+	degree = degree - 1;
+	if (degree == -40)
+	forw = !forw;
+	}
+	*/
+	mtLArm->set(altTemp);
+	Arm->setColor(0, 1, 0);
+	altTemp.makeScale(1, 4, 1);
+	Arm->setMatrix(altTemp);
+	LArmRot->addChild(Arm);
+	mtLArm->addChild(LArmRot);
+	world->addChild(mtLArm);
+
+	//Right Arm
+	altTemp.makeTranslate(2.5, 0, 0);
+	mtRArm->set(altTemp);
+	RArmRot->addChild(Arm);
+	mtRArm->addChild(RArmRot);
+	world->addChild(mtRArm);
+
+	//Left Leg
+	altTemp.makeTranslate(-1, -4, 0);
+	mtLLeg->set(altTemp);
+	Leg->setColor(0, 0, 1);
+	altTemp.makeScale(1, 4, 1);
+	Leg->setMatrix(altTemp);
+	LLegRot->addChild(Leg);
+	mtLLeg->addChild(LLegRot);
+	world->addChild(mtLLeg);
+
+	//Right Leg
+	altTemp.makeTranslate(1, -4, 0);
+	mtRLeg->set(altTemp);
+	RLegRot->addChild(Leg);
+	mtRLeg->addChild(RLegRot);
+	world->addChild(mtRLeg);
+
+}
 //----------------------------------------------------------------------------
 // Callback method called by GLUT when window readraw is necessary or when glutPostRedisplay() was called.
 void Window::displayCallback()
@@ -51,112 +160,34 @@ void Window::displayCallback()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
   glMatrixMode(GL_MODELVIEW);  // make sure we're in Modelview mode
   // Tell OpenGL what ModelView matrix to use:
-  if (create) {
-	  Matrix4 temp;
-	  Matrix4 altTemp;
-
-	  //Torso
-	  Cube *Torso = new Cube(4);
-	  Torso->setColor(1, 1, 1);
-	  world->addChild(Torso);
-
-	  //Head
-	  altTemp.makeTranslate(0, 3, 0);
-	  temp.identity();
-	  temp = temp * altTemp;
-	  MatrixTransform *mtHead = new MatrixTransform(temp);
-	  Cube *Head = new Cube(2);
-	  Head->setColor(1, 0, 0);
-	  mtHead->addChild(Head);
-	  altTemp.makeTranslate(-0.6, 0.25, 2);
-	  MatrixTransform *mtLEye = new MatrixTransform(altTemp);
-	  Cube *Eye = new Cube(0.5);
-	  Eye->setColor(1, 1, 0);
-	  mtLEye->addChild(Eye);
-	  mtHead->addChild(mtLEye);
-	  altTemp.makeTranslate(0.6, 0.25, 2);
-	  MatrixTransform *mtREye = new MatrixTransform(altTemp);
-	  mtREye->addChild(Eye);
-	  mtHead->addChild(mtREye);
-	  altTemp.makeTranslate(0, -0.5, 2);
-	  MatrixTransform *mtMouth = new MatrixTransform(altTemp);
-	  Cube *Mouth = new Cube(0.5);
-	  altTemp.makeScale(2, 1, 1);
-	  Mouth->setMatrix(altTemp);
-	  Mouth->setColor(1, 1, 0);
-	  mtMouth->addChild(Mouth);
-	  mtHead->addChild(mtMouth);
-	  world->addChild(mtHead);
-
-	  //Left Arm
-	  //Left Arm
-	  temp.identity();
-	  altTemp.makeTranslate(-2.5, 0, 0);
-	  temp = temp * altTemp;
-	  /*
-	  if (forw) {
-	  altTemp.makeRotateX(10);
-	  temp = temp *altTemp;
-	  degree = degree + 10;
-	  if (degree == 40)
-	  forw = !forw;
-	  }
-	  if (!forw && degree > -45) {
-	  altTemp.makeRotateX(-10);
-	  temp = temp *altTemp;
-	  degree = degree - 10;
-	  if (degree == -40)
-	  forw = !forw;
-	  }
-	  */
-	  MatrixTransform *mtLArm = new MatrixTransform(temp);
-	  Cube *Arm = new Cube(1);
-	  Arm->setColor(0, 1, 0);
-	  altTemp.makeScale(1, 4, 1);
-	  Arm->setMatrix(altTemp);
-	  mtLArm->addChild(Arm);
-	  //Hand
-	  /*temp.identity();
-	  altTemp.makeTranslate(0, -2.5, 0);
-	  temp = temp * altTemp;
-	  MatrixTransform *mtLHand = new MatrixTransform(temp);
-	  Sphere *Hand = new Sphere(0.5);
-	  Hand->setColor(0, 0, 1);
-	  mtLHand->addChild(Hand);
-	  mtLArm->addChild(mtLHand);
-	  */
-	  world->addChild(mtLArm);
-
-	  //Right Arm
-	  temp.identity();
-	  altTemp.makeTranslate(2.5, 0, 0);
-	  temp = temp * altTemp;
-	  MatrixTransform *mtRArm = new MatrixTransform(temp);
-	  mtRArm->addChild(Arm);
-	  world->addChild(mtRArm);
-
-	  //Left Leg
-	  temp.identity();
-	  altTemp.makeTranslate(-1, -4, 0);
-	  temp = temp * altTemp;
-	  MatrixTransform *mtLLeg = new MatrixTransform(temp);
-	  Cube *Leg = new Cube(1);
-	  Leg->setColor(0, 0, 1);
-	  altTemp.makeScale(1, 4, 1);
-	  Leg->setMatrix(altTemp);
-	  mtLLeg->addChild(Leg);
-	  world->addChild(mtLLeg);
-
-	  //Right Leg
-	  temp.identity();
-	  altTemp.makeTranslate(1, -4, 0);
-	  temp = temp * altTemp;
-	  MatrixTransform *mtRLeg = new MatrixTransform(temp);
-	  mtRLeg->addChild(Leg);
-	  world->addChild(mtRLeg);
-	  create = false;
+  Matrix4 altTemp;
+  Matrix4 temp;
+  Matrix4 altTemp1;
+  if (forw) {
+	  altTemp.makeRotateX(degree);
+	  altTemp1.makeRotateX(-degree);
+	  degree = degree + 1;
+	  if (degree == 20)
+		  forw = !forw;
   }
-
+  else {
+	  altTemp.makeRotateX(degree);
+	  altTemp1.makeRotateX(-degree);
+	  degree = degree - 1;
+	  if (degree == -20)
+		  forw = !forw;
+  }
+  temp = altTemp;
+  altTemp.makeTranslate(0, -2, 0);
+  altTemp1 = altTemp1 * altTemp;
+  temp = temp * altTemp;
+  altTemp.makeTranslate(0, 2, 0);
+  temp = altTemp * temp;
+  altTemp1 = altTemp * altTemp1;
+  LArmRot->set(temp);
+  RLegRot->set(temp);
+  RArmRot->set(altTemp1);
+  LLegRot->set(altTemp1);
   world->draw(Globals::object.getMatrix());
   glFlush();  
   glutSwapBuffers();

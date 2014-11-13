@@ -13,6 +13,7 @@ public:
 	Group(std::string, Node*);
 	void addChild(Node*);
 	void deleteChild(Node*);
+	Node* getChild(int);
 	virtual void draw(Matrix4 C);
 };
 
