@@ -76,8 +76,8 @@ void Matrix4::makeRotateY(double angle)
 }
 
 
-Matrix4& Matrix4::operator*(const Matrix4& m2) {
-	Matrix4* temp = new Matrix4();
+Matrix4 Matrix4::operator*(const Matrix4& m2) {
+	Matrix4 temp;
 
 	for (int row = 0; row < 4; row++) {
 		for (int col = 0; col < 4; col++) {
@@ -85,10 +85,10 @@ Matrix4& Matrix4::operator*(const Matrix4& m2) {
 			for (int i = 0; i < 4; i++) {
 				sum += m[row][i] * m2.m[i][col];
 			}
-			temp->m[row][col] = sum; 
+			temp.m[row][col] = sum; 
 		}
 	}
-	return *temp;
+	return temp;
 }
 
 Vector4& Matrix4::operator*(const Vector4& v) {

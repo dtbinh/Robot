@@ -54,7 +54,6 @@ int main(int argc, char *argv[])
   glutReshapeFunc(Window::reshapeCallback);
   glutIdleFunc(Window::idleCallback);
   glutKeyboardFunc(Window::keyboardCallback);
-  glutSpecialFunc(Window::funcKeyboardCallback);
     
   // Initialize cube matrix:
   Window::load();

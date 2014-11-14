@@ -7,6 +7,7 @@
 class Group : public Node {
 protected:
 	std::list < Node* > children;
+	Matrix4 M;
 public:
 	Group();
 	Group(std::string);
@@ -14,7 +15,9 @@ public:
 	void addChild(Node*);
 	void deleteChild(Node*);
 	Node* getChild(int);
-	virtual void draw(Matrix4 C);
+	void setMatrix(Matrix4 m);
+	virtual void draw(Matrix4 C, bool,bool, Frustum);
+	virtual void update();
 };
 
 #endif

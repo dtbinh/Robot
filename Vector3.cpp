@@ -44,6 +44,14 @@ void Vector3::scale(double s) {
 	}
 }
 
+Vector3 Vector3::altScale(double s) {
+	Vector3 temp;
+	for (int i = 0; i < 3; i++) {
+		temp.v[i] = this->v[i] * s;
+	}
+	return temp;
+}
+
 double Vector3::dot(const Vector3& v1, const Vector3& v2) {
 	double result = 0;
 

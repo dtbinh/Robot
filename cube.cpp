@@ -10,6 +10,8 @@ Cube::Cube() {
 
 }
 Cube::Cube(double s) {
+	center.set(0, 0, 0, 1);
+	scale.set(s*0.5, s*0.5, s*0.5,0);
 	size = s;
 	m.identity();
 }

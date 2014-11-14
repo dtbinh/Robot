@@ -12,6 +12,7 @@ public:
 	Sphere(double);
 	void render();
 	void setMatrix(Matrix4);
+	virtual void update();
 };
 
 #endif

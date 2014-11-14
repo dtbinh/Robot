@@ -20,7 +20,7 @@ class Matrix4
     void transpose();
     void makeRotateY(double);
 
-	Matrix4& operator*(const Matrix4&);
+	Matrix4 operator*(const Matrix4&);
 	Vector4& operator*(const Vector4&);
 
 	void makeRotateX(double);

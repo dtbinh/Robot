@@ -11,9 +11,10 @@ public:
 	MatrixTransform();
 	MatrixTransform(Matrix4);
 	MatrixTransform(std::string, Node*,Matrix4 );
-	virtual void draw(Matrix4 C);
+	virtual void draw(Matrix4 C, bool,bool, Frustum);
 	void set(Matrix4);
 	Matrix4 get();
+	virtual void update();
 };
 
 #endif

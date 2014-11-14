@@ -12,10 +12,11 @@ protected:
 	Matrix4 m;
 public:
 	Geode();
-	void draw(Matrix4 C);
+	void draw(Matrix4 C, bool,bool, Frustum);
 	virtual void render() = 0;
 	void setColor(double, double, double);
 	virtual void setMatrix(Matrix4) = 0;
+	void update();
 };
 
 #endif
