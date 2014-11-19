@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
   glutInit(&argc, argv);      	      	      // initialize GLUT
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);   // open an OpenGL context with double buffering, RGB colors, and depth buffering
   glutInitWindowSize(Window::width, Window::height);      // set initial window size
-  glutCreateWindow("OpenGL Cube");    	      // open window and set window title
+  glutCreateWindow("MOHOHOHOHOHOHOHOHO");    	      // open window and set window title
 
   glEnable(GL_DEPTH_TEST);            	      // enable depth buffering
   glClear(GL_DEPTH_BUFFER_BIT);       	      // clear depth buffer
@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
   glutReshapeFunc(Window::reshapeCallback);
   glutIdleFunc(Window::idleCallback);
   glutKeyboardFunc(Window::keyboardCallback);
+  glutMouseFunc(Window::funcMouseCallback);
+  glutMotionFunc(Window::funcMouseMovement);
     
   // Initialize cube matrix:
   Window::loadRobot();

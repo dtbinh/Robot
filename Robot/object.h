@@ -21,8 +21,9 @@ public:
 	bool getRotation();
 	void flipRotation();
 	void spinX(double);
-
+	void spinV(double, Vector3);
 	void spin(double);      // spin cube [degrees]
+	Vector3 getCenter();
 };
 
 #endif

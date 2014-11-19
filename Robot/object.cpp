@@ -71,3 +71,12 @@ void Object::flipRotation() {
 	rotation = !rotation;
 }
 
+void Object::spinV(double angle, Vector3 axis) {
+	Matrix4 mat;
+	mat.makeRotate(angle, axis);
+	model2world = model2world * mat;
+}
+
+Vector3 Object::getCenter() {
+	return *center;
+}

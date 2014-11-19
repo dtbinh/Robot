@@ -13,7 +13,8 @@ class Window	  // OpenGL output window related routines
 	static void keyboardCallback(unsigned char, int, int);
 	static void funcKeyboardCallback(int, int, int);
 	static void loadRobot();
-
+	static void funcMouseCallback(int, int, int, int);
+	static void funcMouseMovement(int, int);
 };
 
 #endif

@@ -19,13 +19,15 @@ using namespace std;
 
 int Window::width  = 512;   // set window width in pixels here
 int Window::height = 512;   // set window height in pixels here
+Vector3 mouse;
 static double degree = 1;
 bool forw = true;
 bool walk = false;
 bool bound = false;
 bool cull = false;
-bool robot = true;
-
+bool robot = false;
+bool scale = false;
+bool rot = false;
 //Dimensions
 double sTorso = 4;
 double sHead = 2;
@@ -177,8 +179,8 @@ void Window::loadRobot() {
 		}
 	}
 	
-	bunny->load();
-	bunny->setMatrix(Globals::object.getMatrix());
+	//bunny->load();
+	//bunny->setMatrix(Globals::object.getMatrix());
 	//world->addChild(Control);
 }
 //----------------------------------------------------------------------------
@@ -242,8 +244,9 @@ void Window::displayCallback()
 		glMatrixMode(GL_MODELVIEW);  // make sure we're in Modelview mode
 		Matrix4 temp;
 		temp = Globals::object.getMatrix();
-		bunny->setMatrix(Globals::object.getMatrix());
-		bunny->draw(camera.getInverse(), false, false, frustum);
+		Torso->draw(Globals::object.getMatrix(), false, false, frustum);
+		//bunny->setMatrix(Globals::object.getMatrix());
+		//bunny->draw(camera.getInverse(), false, false, frustum);
 		glFlush();
 		glutSwapBuffers();
 	}
@@ -325,5 +328,71 @@ void Window::keyboardCallback(unsigned char key, int x, int y) {
 	case'R':
 		robot = !robot;
 		break;
+	}
+}
+
+
+void Window::funcMouseCallback(int button, int state, int x, int y) {
+	if (button == GLUT_RIGHT_BUTTON) {
+		if (state == GLUT_DOWN) {
+			scale = true;
+			mouse.set(x, y, 0);
+		}
+		else if (state == GLUT_UP) {
+			scale = false;
+		}
+	}
+	if (button == GLUT_LEFT_BUTTON){
+		if (state == GLUT_DOWN) {
+			rot = true;
+			double tempX = (2.0*x - Window::width) / Window::width;
+			double tempY = (Window::height - 2.0*y) / Window::height;
+			mouse.set(tempX, tempY, 0);
+			double d = mouse.length();
+			d = (d < 1.0) ? d : 1.0;
+			mouse.set(tempX, tempY, sqrtf(1.001 - d*d));
+			mouse.normalize();
+		}
+		else if (state == GLUT_UP) {
+			rot = false;
+		}
+	}
+}
+
+void Window::funcMouseMovement(int x, int y) {
+
+	cout << "New Coos " << x << " " << y << endl;
+	if (scale) {
+		int scaleFactor = y - mouse.getY();
+		if (scaleFactor == 0) {
+
+		}
+		else if (scaleFactor > 0) {
+			Globals::object.scale(11.0 / 10.0);
+			//Globals::object.move(0, 0, 1);
+		}
+		else if (scaleFactor < 0) {
+			Globals::object.scale(10.0 / 11.0);
+			//Globals::object.move(0, 0, -1);
+		}
+		mouse.set(x, y, 0);
+	}
+	if (rot) {
+		Vector3 newPosition;
+		double tempX = (2.0*x - Window::width) / Window::width;
+		double tempY = (Window::height - 2.0*y) / Window::height;
+		newPosition.set(tempX, tempY, 0);
+		double d = newPosition.length();
+		d = (d < 1.0) ? d : 1.0;
+		newPosition.set(tempX, tempY, sqrtf(1.001 - d*d));
+		newPosition.normalize();
+		mouse.normalize();
+		Vector3 direction = newPosition - mouse;
+		double speed = direction.length();
+		if (speed > 0.001) {
+			Vector3 axis = axis.cross(mouse, newPosition);
+			Globals::object.spinV(speed * 100, axis);
+			mouse.set(newPosition.getX(), newPosition.getY(), newPosition.getZ());
+		}
 	}
 }
