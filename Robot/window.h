@@ -12,7 +12,7 @@ class Window	  // OpenGL output window related routines
     static void displayCallback(void);
 	static void keyboardCallback(unsigned char, int, int);
 	static void funcKeyboardCallback(int, int, int);
-	static void load();
+	static void loadRobot();
 
 };
 

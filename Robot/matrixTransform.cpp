@@ -36,16 +36,18 @@ void MatrixTransform::draw(Matrix4 temp, bool wire,bool cull, Frustum frum) {
 		Node* tempNode = *it;
 		number++;
 		tempNode->draw(C, wire,cull, frum);
+		/*
 		if (radius < tempNode->scale.length()) {
 			radius = tempNode->scale.length();
 		}
 		x = x + tempNode->center.get(0);
 		y = y + tempNode->center.get(1);
 		z = z + tempNode->center.get(2);
+		*/
 	}
-	x = x / number;
-	y = y / number;
-	z = z / number;
+	//x = x / number;
+	//y = y / number;
+	//z = z / number;
 	/*
 	if (wire) {
 		glMatrixMode(GL_MODELVIEW);
@@ -56,8 +58,9 @@ void MatrixTransform::draw(Matrix4 temp, bool wire,bool cull, Frustum frum) {
 		glMatrix = translate;
 		glMatrix.transpose();
 		glLoadMatrixd(glMatrix.getPointer());
-		glutWireSphere(radius, 20, 20);
-	}*/
+		glutWireSphere(2.0, 20, 20);
+	}
+	*/
 }
 void MatrixTransform::update() {
 	for (std::list<Node*>::iterator it = children.begin(); it != children.end(); ++it) {

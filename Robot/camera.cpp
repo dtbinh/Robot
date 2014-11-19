@@ -29,7 +29,9 @@ void Camera::set(Vector3& a, Vector3& b, Vector3& c) {
 	}
 	makeInverse();
 }
-
+void Camera::setMatrix(Matrix4 temp) {
+	world2camera = temp;
+}
 void Camera::makeInverse() {
 	e->negate();
 	Matrix4 translation;

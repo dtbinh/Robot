@@ -12,6 +12,8 @@
 #include "matrixTransform.h"
 #include "camera.h"
 #include "frustum.h"
+#include <time.h>
+#include "parser.h"
 
 using namespace std;
 
@@ -22,6 +24,7 @@ bool forw = true;
 bool walk = false;
 bool bound = false;
 bool cull = false;
+bool robot = true;
 
 //Dimensions
 double sTorso = 4;
@@ -33,9 +36,11 @@ double sArm = 1;
 double sLeg = 1;
 double wArm = 4;
 double wLeg = 4;
-
+//Parser
+Parser *bunny = new Parser("bunny.obj", double(Window::width) / double(Window::height));
 //Camera
 Camera camera;
+Camera pc;
 
 //Frustum
 Frustum frustum;
@@ -88,16 +93,16 @@ void Window::reshapeCallback(int w, int h)
   glLoadIdentity();
   gluPerspective(60.0, double(width)/(double)height, 1.0, 1000.0); // set perspective projection viewing frustum
   frustum.setCamInternals(60.0, double(width) / double(height), 1.0, 1000.0);
-  frustum.setCamDef(Vector3(0.0, 5.0, 10.0), Vector3(0, 0, 0), Vector3(0, 1, 0));
+  frustum.setCamDef(Vector3(0.0, 0.0, 20.0), Vector3(0, 0, 0), Vector3(0, 1, 0));
   //glTranslatef(0, -7, -30);    // walk camera back 20 units so that it looks at the origin (or else it's in the origin)
   glMatrixMode(GL_MODELVIEW);
 }
 
-void Window::load() {
+void Window::loadRobot() {
 	Matrix4 temp;
 	Matrix4 altTemp;
-	camera.set(Vector3(0.0, 5.0, 10.0), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
+	camera.set(Vector3(0, 5, 20.0), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	pc.set(Vector3(0, 0, 20.0), Vector3(0, 0, 0), Vector3(0, 1, 0));
 	Control->set(Globals::object.getMatrix());
 
 	//Torso
@@ -172,57 +177,76 @@ void Window::load() {
 		}
 	}
 	
+	bunny->load();
+	bunny->setMatrix(Globals::object.getMatrix());
 	//world->addChild(Control);
 }
 //----------------------------------------------------------------------------
 // Callback method called by GLUT when window readraw is necessary or when glutPostRedisplay() was called.
 void Window::displayCallback()
 {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
-  glMatrixMode(GL_MODELVIEW);  // make sure we're in Modelview mode
-  // Tell OpenGL what ModelView matrix to use:
-  Matrix4 altTemp;
-  Matrix4 temp;
-  Matrix4 altTemp1;
-  Control->set(Globals::object.getMatrix());
-  if (walk) {
-	  if (forw) {
-		  altTemp.makeRotateX(degree);
-		  altTemp1.makeRotateX(-degree);
-		  degree = degree + 1;
-		  if (degree == 20)
-			  forw = !forw;
-	  }
-	  else {
-		  altTemp.makeRotateX(degree);
-		  altTemp1.makeRotateX(-degree);
-		  degree = degree - 1;
-		  if (degree == -20)
-			  forw = !forw;
-	  }
-  }
-  else {
-	  altTemp.identity();
-	  altTemp1.identity();
-  }
-  temp = altTemp;
-  altTemp.makeTranslate(0, -wArm/2, 0);
-  altTemp1 = altTemp1 * altTemp;
-  temp = temp * altTemp;
-  altTemp.makeTranslate(0, wArm/2, 0);
-  temp = altTemp * temp;
-  altTemp1 = altTemp * altTemp1;
-  LArmRot->set(temp);
-  RLegRot->set(temp);
-  RArmRot->set(altTemp1);
-  LLegRot->set(altTemp1);
-  temp.identity(); 
-  world->draw(camera.getInverse(), bound, cull, frustum);
-  world->update();
+	if (robot) {
+		clock_t begin = clock();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
+		glMatrixMode(GL_MODELVIEW);  // make sure we're in Modelview mode
+		// Tell OpenGL what ModelView matrix to use:
+		Matrix4 altTemp;
+		Matrix4 temp;
+		Matrix4 altTemp1;
+		Control->set(Globals::object.getMatrix());
+		if (walk) {
+			if (forw) {
+				altTemp.makeRotateX(degree);
+				altTemp1.makeRotateX(-degree);
+				degree = degree + 1;
+				if (degree == 20)
+					forw = !forw;
+			}
+			else {
+				altTemp.makeRotateX(degree);
+				altTemp1.makeRotateX(-degree);
+				degree = degree - 1;
+				if (degree == -20)
+					forw = !forw;
+			}
+		}
+		else {
+			altTemp.identity();
+			altTemp1.identity();
+		}
+		temp = altTemp;
+		altTemp.makeTranslate(0, -wArm / 2, 0);
+		altTemp1 = altTemp1 * altTemp;
+		temp = temp * altTemp;
+		altTemp.makeTranslate(0, wArm / 2, 0);
+		temp = altTemp * temp;
+		altTemp1 = altTemp * altTemp1;
+		LArmRot->set(temp);
+		RLegRot->set(temp);
+		RArmRot->set(altTemp1);
+		LLegRot->set(altTemp1);
+		temp.identity();
+		world->draw(camera.getInverse(), bound, cull, frustum);
+		world->update();
 
-  
-  glFlush();  
-  glutSwapBuffers();
+
+		glFlush();
+		glutSwapBuffers();
+		clock_t end = clock();
+		double sec = double(end - begin) / CLOCKS_PER_SEC;
+		double fps = 1 / sec;
+		cout << "FPS: " << fps << endl;
+	}
+	else {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // clear color and depth buffers
+		glMatrixMode(GL_MODELVIEW);  // make sure we're in Modelview mode
+		Matrix4 temp;
+		temp = Globals::object.getMatrix();
+		bunny->setMatrix(Globals::object.getMatrix());
+		bunny->draw(camera.getInverse(), false, false, frustum);
+		glFlush();
+		glutSwapBuffers();
+	}
 }
 //----------------------------------------------------------------------------
 // Callback method called by GLUT when users press specific keys on the keyboard
@@ -297,6 +321,9 @@ void Window::keyboardCallback(unsigned char key, int x, int y) {
 	case 'c':
 		cull = !cull;
 		cout << "CULL" << endl;
+		break;
+	case'R':
+		robot = !robot;
 		break;
 	}
 }

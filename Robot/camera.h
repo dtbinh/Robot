@@ -21,6 +21,7 @@ public:
 	Matrix4& getInverse();
 	void move(double, double, double);
 	void makeInverse();
+	void setMatrix(Matrix4);
 };
 
 #endif

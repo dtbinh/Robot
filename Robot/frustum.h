@@ -1,3 +1,4 @@
+//Based on the files in lightouse
 #ifndef _FRUSTUM_
 #define _FRUSTUM_
 
