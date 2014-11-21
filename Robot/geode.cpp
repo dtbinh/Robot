@@ -61,3 +61,6 @@ void Geode::setColor(double r, double g, double b) {
 
 void Geode::update() {
 }
+Matrix4 Geode::getMatrix() {
+	return m;
+}

@@ -15,14 +15,19 @@
     <ClCompile Include="cube.cpp" />
     <ClCompile Include="frustum.cpp" />
     <ClCompile Include="geode.cpp" />
+    <ClCompile Include="GLee.c" />
     <ClCompile Include="group.cpp" />
+    <ClCompile Include="light.cpp" />
+    <ClCompile Include="lightSource.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="material.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="matrixTransform.cpp" />
     <ClCompile Include="node.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="parser.cpp" />
     <ClCompile Include="plane.cpp" />
+    <ClCompile Include="shader.cpp" />
     <ClCompile Include="sphere.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />
@@ -33,18 +38,32 @@
     <ClInclude Include="cube.h" />
     <ClInclude Include="frustum.h" />
     <ClInclude Include="geode.h" />
+    <ClInclude Include="GLee.h" />
     <ClInclude Include="group.h" />
+    <ClInclude Include="light.h" />
+    <ClInclude Include="lightSource.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="material.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="matrixTransform.h" />
     <ClInclude Include="node.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="parser.h" />
     <ClInclude Include="plane.h" />
+    <ClInclude Include="shader.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="bear.obj" />
+    <Object Include="bunny.obj" />
+    <Object Include="dragon.obj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="spotlight.frag" />
+    <None Include="spotlight.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{F1ABD5AD-378E-4535-AFB8-A72B92DE1544}</ProjectGuid>
@@ -83,6 +102,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>C:\Users\Tony\Google Drive\CSE 167\Robot;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

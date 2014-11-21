@@ -17,6 +17,7 @@ public:
 	void setColor(double, double, double);
 	virtual void setMatrix(Matrix4) = 0;
 	void update();
+	Matrix4 getMatrix();
 };
 
 #endif

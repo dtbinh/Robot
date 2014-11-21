@@ -121,6 +121,7 @@ void Matrix4::makeRotateZ(double angle) {
 }
 
 void Matrix4::makeRotate(double angle, const Vector3& axis) {
+	identity();
 	angle = angle / 180.0 * M_PI;
 
 	Vector3 ax = axis;

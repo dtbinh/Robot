@@ -15,6 +15,7 @@ using namespace std;
 namespace Globals
 {
   Object object;
+  Shader *shader;
 
 };
 
@@ -44,11 +45,12 @@ int main(int argc, char *argv[])
   glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shininess);
   glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
   glEnable(GL_COLOR_MATERIAL);
+
   
   // Generate light source:
-  glLightfv(GL_LIGHT0, GL_POSITION, position);
+  //glLightfv(GL_LIGHT3, GL_POSITION, position);
   glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+  //glEnable(GL_LIGHT3);
   // Install callback functions:
   glutDisplayFunc(Window::displayCallback);
   glutReshapeFunc(Window::reshapeCallback);
@@ -56,9 +58,11 @@ int main(int argc, char *argv[])
   glutKeyboardFunc(Window::keyboardCallback);
   glutMouseFunc(Window::funcMouseCallback);
   glutMotionFunc(Window::funcMouseMovement);
+  glutSpecialFunc(Window::funcKeyboardCallback);
     
   // Initialize cube matrix:
   Window::loadRobot();
+  Globals::shader = new Shader("spotlight.vert", "spotlight.frag", true);
   Globals::object.getMatrix().identity();
   glutMainLoop();
   return 0;
